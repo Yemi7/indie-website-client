@@ -8,6 +8,7 @@ import PrivatePage from "../pages/PrivatePage"
 import OnlyPrivate from "../components/OnlyPrivate"
 import GameList from "../pages/GameList"
 import GameDetails from "../pages/GameDetails"
+import CreateGame from "../pages/CreateGame"
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
 
         <Route path="/game-list" element={<GameList />} />
         <Route path="/game-details/:gameId" element={<GameDetails />} />
+        <Route path="/create-game" element={<CreateGame />} />{/* future private route */}
       </Routes>
     </>
   )
