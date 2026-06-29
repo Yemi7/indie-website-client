@@ -43,9 +43,9 @@ function AuthWrapper(props) {
         authenticateUser()
     }, [])
 
-/*     if(isAuthenticating){
+ if(isAuthenticating){
         return <h3>is authenticating</h3>
-    } */
+    } 
 
     return(
         <AuthContext.Provider value={passedContext}>

@@ -1,12 +1,13 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
 import Editor from "../components/Editor"
 import Home from "../pages/Home"
 import { Route, Routes } from "react-router"
 import Login from "../pages/auth/Login"
 import Signup from "../pages/auth/Signup"
+import PrivatePage from "../pages/PrivatePage"
+import OnlyPrivate from "../components/OnlyPrivate"
+import GameList from "../pages/GameList"
+import GameDetails from "../pages/GameDetails"
 
 
 function App() {
@@ -18,6 +19,11 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
+        {/* Just testing using a private guard */}
+        <Route path="/private" element={<OnlyPrivate> <PrivatePage /> </OnlyPrivate>} />
+
+        <Route path="/game-list" element={<GameList />} />
+        <Route path="/game-details/:gameId" element={<GameDetails />} />
       </Routes>
     </>
   )
