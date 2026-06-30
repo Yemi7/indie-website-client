@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router"
 import service from "../services/service.config"
 import { Carousel } from "flowbite-react"
+import { Route, Routes, useParams } from "react-router-dom"
 
 function GameDetails() {
 
@@ -24,21 +24,45 @@ function GameDetails() {
 
     if (loading) {
         return <h1>Loading...</h1>
-    }
 
+    }
+    console.log(game.images)
     return (
         <div className="">
             <h1 className="text-5xl mb-10 text-center">This is the game details page</h1>
             <div className="mx-auto h-96 max-w-md">
-                <Carousel className="max-w-md">
-                    {
-                        game.images.map((image) => {
+
+                <Carousel>
+
+                    {/* game.images.map((image, i) => {
+
                             return (
-                                <img key={image} src={image} />
+                                <img key={i}
+                                    src={images}
+                                    className="object-cover w-full h-full"
+                                />
                             )
-                        })
-                    }
+                        })*/ }
+                        <div className="flex h-full items-center justify-center bg-green-500">slide 1</div>
+                        <div className="flex h-full items-center justify-center bg-blue-500">slide 2</div>
+                        <div className="flex h-full items-center justify-center bg-red-500">slide 3</div>
+                    {/*<img src={game.images[0]}/>
+                    <img src={game.images[1]}/>
+                    <img src={game.images[2]}/>*/}
+
                 </Carousel>
+            </div>
+            <div className="max-w-md mx-auto mt-10" >
+                {game.images.map((image, i) => {
+                    return (
+                        <img
+                            key={i}
+                            src={image}
+                            className="object-cover w-full h-full"
+                        />
+
+                    )
+                })}
             </div>
             <div className="game-details">
                 <h2>{game.title}</h2>
