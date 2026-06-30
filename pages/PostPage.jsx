@@ -40,6 +40,7 @@ function PostPage() {
             readOnly: true,
             data: content,
             tools: {
+                // fix header font size being the same
                 header: Header,
                 paragraph: {
                     inlineToolbar: ["link", "bold", "italic"],
@@ -48,8 +49,14 @@ function PostPage() {
                     class: ImageTool,
                     config: {
                         endpoints: {
-                            byFile: `${API_URL}/upload-editor`,
+                            byFile: `${API_URL}/upload/upload-editor`,
                         },
+                        additionalRequestHeaders: {
+                            authorization: `Bearer ${localStorage.getItem("authToken")}`,
+                        },
+                        features: {
+                            caption: false,
+                        }
                     },
                 },
             },

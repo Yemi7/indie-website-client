@@ -14,7 +14,7 @@ function PostEditor() {
     const { game, post } = useParams()
 
     const [title, setTitle] = useState("")
-    const API_URL = import.meta.env.VITE_API_URL
+    const API_URL = `${import.meta.env.VITE_SERVER_URL}/api`
     const holderRef = useRef(null)
     const editorRef = useRef(null)
     // if there isn't a post we are creating
@@ -37,8 +37,14 @@ function PostEditor() {
                         class: ImageTool,
                         config: {
                             endpoints: {
-                                byFile: `${API_URL}/upload-editor`,
+                                byFile: `${API_URL}/upload/upload-editor`,
                             },
+                            additionalRequestHeaders: {
+                                authorization: `Bearer ${localStorage.getItem("authToken")}`,
+                            },
+                            features: {
+                                caption: false,
+                            }
                         },
                     },
                 },
