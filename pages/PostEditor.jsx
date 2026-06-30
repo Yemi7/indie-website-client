@@ -28,6 +28,7 @@ function PostEditor() {
             const editor = new EditorJS({
                 holder: holderRef.current,
                 tools: {
+                    // fix header font size being the same
                     header: Header,
                     paragraph: {
                         inlineToolbar: ["link", "bold", "italic"],

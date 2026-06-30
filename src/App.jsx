@@ -11,6 +11,7 @@ import GameDetails from "../pages/GameDetails"
 import GameForm from "../pages/GameForm"
 import { Route, Routes } from "react-router-dom"
 import PostEditor from "../pages/PostEditor"
+import PostPage from "../pages/PostPage"
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
         <Route path="/game-edit/:id/edit" element={<GameForm />} />{/* future private route */}
         <Route path="/post/create-post/:game" element={<PostEditor />} ></Route>
         <Route path="/post/edit-post/:post" element={<PostEditor />} ></Route>
+        <Route path="/post/view-post/:post" element={<PostPage />} ></Route>
       </Routes>
     </>
   )
