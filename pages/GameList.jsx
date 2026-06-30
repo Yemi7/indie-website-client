@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import service from "../services/service.config"
 import { Button, Card } from "flowbite-react";
-import { useNavigate } from "react-router";
+import { Route, useNavigate } from "react-router-dom";
 
 function GameList() {
     const navigate = useNavigate()

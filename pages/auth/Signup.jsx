@@ -1,7 +1,7 @@
 import { useState } from "react"
 import service from "../../services/service.config"
-import { useNavigate } from "react-router"
 import { Button, TextInput, Label } from "flowbite-react"
+import { useNavigate } from "react-router-dom"
 
 function Signup() {
 

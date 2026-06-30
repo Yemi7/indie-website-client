@@ -13,11 +13,9 @@
     "@editorjs/editorjs": "^2.31.6",
     "@tailwindcss/vite": "^4.3.1",
     "axios": "^1.18.1",
-    "cloudinary": "^2.10.0",
     "flowbite-react": "^0.12.17",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
-    "react-router": "^8.0.1",
     "react-router-dom": "^7.18.0",
     "tailwindcss": "^4.3.1"
   },

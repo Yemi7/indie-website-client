@@ -1,14 +1,15 @@
 import { useState } from 'react'
 import Editor from "../components/Editor"
 import Home from "../pages/Home"
-import { Route, Routes } from "react-router"
+
 import Login from "../pages/auth/Login"
 import Signup from "../pages/auth/Signup"
 import PrivatePage from "../pages/PrivatePage"
 import OnlyPrivate from "../components/OnlyPrivate"
 import GameList from "../pages/GameList"
 import GameDetails from "../pages/GameDetails"
-import CreateGame from "../pages/CreateGame"
+import GameForm from "../pages/GameForm"
+import { Route, Routes } from "react-router-dom"
 
 
 function App() {
@@ -25,7 +26,8 @@ function App() {
 
         <Route path="/game-list" element={<GameList />} />
         <Route path="/game-details/:gameId" element={<GameDetails />} />
-        <Route path="/create-game" element={<CreateGame />} />{/* future private route */}
+        <Route path="/game-form" element={<GameForm />} />{/* future private route */}
+        <Route path="/game-edit/:id/edit" element={<GameForm />} />{/* future private route */}
       </Routes>
     </>
   )

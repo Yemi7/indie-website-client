@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/auth.context";
-import { useNavigate } from "react-router";
 import service from "../../services/service.config";
 import { Button, Label, TextInput } from "flowbite-react";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
 
