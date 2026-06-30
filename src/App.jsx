@@ -10,6 +10,7 @@ import GameList from "../pages/GameList"
 import GameDetails from "../pages/GameDetails"
 import GameForm from "../pages/GameForm"
 import { Route, Routes } from "react-router-dom"
+import PostEditor from "../pages/PostEditor"
 
 
 function App() {
@@ -28,6 +29,8 @@ function App() {
         <Route path="/game-details/:gameId" element={<GameDetails />} />
         <Route path="/game-form" element={<GameForm />} />{/* future private route */}
         <Route path="/game-edit/:id/edit" element={<GameForm />} />{/* future private route */}
+        <Route path="/post/create-post/:game" element={<PostEditor />} ></Route>
+        <Route path="/post/edit-post/:post" element={<PostEditor />} ></Route>
       </Routes>
     </>
   )

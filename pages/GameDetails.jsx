@@ -8,48 +8,63 @@ function GameDetails() {
     const { gameId } = useParams()
 
     const [game, setGame] = useState(null)
+    const [posts, setPosts] = useState([])
     const [loading, setLoading] = useState(true)
+    const [loadingPost, setLoadingPost] = useState(true)
 
     useEffect(() => {
         getGameDetails()
+        getPostList()
     }, [])
 
     const getGameDetails = async () => {
-        const gameDetailsRequest = await service.get(`/game/${gameId}`)
-        const gameDetails = gameDetailsRequest.data
-        console.log(gameDetails);
-        setGame(gameDetails)
-        setLoading(false)
+        try {
+            const gameDetailsRequest = await service.get(`/game/${gameId}`)
+            const gameDetails = gameDetailsRequest.data
+            setGame(gameDetails)
+            setLoading(false)
+
+        } catch (error) {
+            console.log(error);
+        }
     }
 
-    if (loading) {
+    const getPostList = async () => {
+        try {
+            const postRequest = await service.get(`/post/${gameId}/by-game`)
+            const postData = postRequest.data
+            console.log(postData);
+            setPosts(postData)
+            setLoadingPost(false)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    if (loading || loadingPost) {
         return <h1>Loading...</h1>
 
     }
-    console.log(game.images)
     return (
         <div className="">
             <h1 className="text-5xl mb-10 text-center">This is the game details page</h1>
             <div className="mx-auto h-96 max-w-md">
 
                 <Carousel>
-
-                    {/* game.images.map((image, i) => {
+                    {
+                        game.images.map((image, i) => {
 
                             return (
-                                <img key={i}
-                                    src={images}
+                                <div className="relative h-full">
+                                    <img key={i}
+                                    src={image}
                                     className="object-cover w-full h-full"
                                 />
+                                </div>
+                                
                             )
-                        })*/ }
-                        <div className="flex h-full items-center justify-center bg-green-500">slide 1</div>
-                        <div className="flex h-full items-center justify-center bg-blue-500">slide 2</div>
-                        <div className="flex h-full items-center justify-center bg-red-500">slide 3</div>
-                    {/*<img src={game.images[0]}/>
-                    <img src={game.images[1]}/>
-                    <img src={game.images[2]}/>*/}
-
+                        })
+                    }
                 </Carousel>
             </div>
             <div className="max-w-md mx-auto mt-10" >
@@ -64,13 +79,25 @@ function GameDetails() {
                     )
                 })}
             </div>
-            <div className="game-details">
+            <div className="game-details mb-20">
                 <h2>{game.title}</h2>
                 {/* implement link to developer details using game.user.id */}
                 <p>{game.user.username}</p>
                 <p>{game.engine}</p>
                 <p>Start Date: {new Date(game.startDate).toLocaleDateString("en-GB")}</p>
                 <p>End Date: {new Date(game.expectedRelease).toLocaleDateString("en-GB")}</p>
+            </div>
+            <div className="post-list">
+                {
+                    posts.map((post, i) => {
+                        return (
+                            <div className="post-item mb-5">
+                                <h2>{post.title}</h2>
+                                {/* implement a post description in model */}
+                            </div>
+                        )
+                    })
+                }
             </div>
         </div>
     )

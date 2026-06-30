@@ -38,6 +38,7 @@ function GameList() {
                                 <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{game.title}</h5>
                                 <p className="font-normal text-gray-700 dark:text-gray-400">Game Developer: {game.user.username}</p>
                                 <Button color="purple" onClick={() => { navigate(`/game-details/${game._id}`) }}>See Details</Button>
+                                <Button onClick={() => { navigate(`/post/create-post/${game._id}`) }} >Make Post</Button>
                             </Card>
                         )
                     })

@@ -7,11 +7,11 @@ import { AuthWrapper } from "../context/auth.context.jsx"
 
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+
     <BrowserRouter>
       <AuthWrapper>
         <App />
       </AuthWrapper>
     </BrowserRouter>
-  </StrictMode>,
+
 )
