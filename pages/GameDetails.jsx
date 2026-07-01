@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import service from "../services/service.config"
-import { Carousel } from "flowbite-react"
-import { Route, Routes, useParams } from "react-router-dom"
+import { Button, Carousel } from "flowbite-react"
+import { Route, Routes, useNavigate, useParams } from "react-router-dom"
 
 function GameDetails() {
 
@@ -11,6 +11,8 @@ function GameDetails() {
     const [posts, setPosts] = useState([])
     const [loading, setLoading] = useState(true)
     const [loadingPost, setLoadingPost] = useState(true)
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         getGameDetails()
@@ -57,30 +59,19 @@ function GameDetails() {
                             return (
                                 <div className="relative h-full">
                                     <img key={i}
-                                    src={image}
-                                    className="object-cover w-full h-full"
-                                />
+                                        src={image}
+                                        className="object-cover w-full h-full"
+                                    />
                                 </div>
-                                
+
                             )
                         })
                     }
                 </Carousel>
             </div>
-            <div className="max-w-md mx-auto mt-10" >
-                {game.images.map((image, i) => {
-                    return (
-                        <img
-                            key={i}
-                            src={image}
-                            className="object-cover w-full h-full"
-                        />
-
-                    )
-                })}
-            </div>
             <div className="game-details mb-20">
                 <h2>{game.title}</h2>
+                <p>{game.description}</p>
                 {/* implement link to developer details using game.user.id */}
                 <p>{game.user.username}</p>
                 <p>{game.engine}</p>
@@ -93,6 +84,8 @@ function GameDetails() {
                         return (
                             <div className="post-item mb-5">
                                 <h2>{post.title}</h2>
+                                <Button onClick={() => { navigate(`/post/view-post/${post._id}`) }} >go to post</Button>
+                                {/* add conditional to send post owner to edit post, and others to view post */}
                                 {/* implement a post description in model */}
                             </div>
                         )

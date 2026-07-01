@@ -13,11 +13,13 @@ function GameForm() {
     const [engine, setEngine] = useState("")
     const [coverUrl, setCoverUrl] = useState(null)
     const [imageUrls, setImageUrls] = useState([])
+    const [description, setDescription] = useState("")
     const [uploading, setUploading] = useState(false)
     const [uploadingMany, setUploadingMany] = useState(false)
 
     const handleTitleChange = (e) => setTitle(e.target.value)
     const handleEngineChange = (e) => setEngine(e.target.value)
+    const handleDescriptionChange = (e) => setDescription(e.target.value)
     const handleStartDateChange = (date) => setStartDate(date)
     const handleExpectedReleaseChange = (date) => setExpectedRelease(date)
     // const handleCoverChange = (e) => setCover(e.target.value)
@@ -60,6 +62,7 @@ function GameForm() {
             startDate,
             expectedRelease,
             engine,
+            description,
             cover: coverUrl,
             images: imageUrls,
         }
@@ -139,6 +142,20 @@ function GameForm() {
                             placeholder="Game Title"
                             value={title}
                             onChange={handleTitleChange}
+                            required
+
+                        />
+                    </div>
+                    <div>
+                        <div className="mb-2 block ">
+                            <Label htmlFor="description">Description</Label>
+                        </div>
+                        <TextInput
+                            id="description"
+                            type="text"
+                            placeholder="Game Title"
+                            value={description}
+                            onChange={handleDescriptionChange}
                             required
 
                         />

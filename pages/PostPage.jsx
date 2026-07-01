@@ -3,7 +3,8 @@ import EditorJS from "@editorjs/editorjs";
 import Header from "@editorjs/header";
 import ImageTool from "@editorjs/image";
 import service from "../services/service.config";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { Button } from "flowbite-react";
 
 
 function PostPage() {
@@ -15,6 +16,10 @@ function PostPage() {
     const editorRef = useRef(null);
     const [content, setContent] = useState(null);
     const [title, setTitle] = useState("")
+    const [comments, setComments] = useState([])
+    const [gameId, setGameId] = useState("")
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (!post) return
@@ -25,8 +30,10 @@ function PostPage() {
             console.log(data);
             setTitle(data.title)
             setContent(data.content)
+            setGameId(data.game._id)
         };
         loadPost();
+        getComments()
     }, [post]);
 
     useEffect(() => {
@@ -61,24 +68,53 @@ function PostPage() {
                 },
             },
         });
+
         editorRef.current = editor;
         return () => {
-            editor.destroy();
+            if (editorRef.current?.destroy) {
+                editorRef.current.destroy();
+            }
+
             editorRef.current = null;
+
             if (holderRef.current) {
                 holderRef.current.innerHTML = "";
             }
         };
     }, [content]);
 
+    const getComments = async () => {
+        try {
+            const response = await service.get(`/comment/${post}/by-post`)
+            const data = response.data
+
+            setComments(data);
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
 
     return (
         <div>
             <h1>{title}</h1>
             <div ref={holderRef} />
+            <div className="comments">
+                {
+                    comments.map((comment) => {
+                        return (
+                            <div className="comment-item" key={comment._id}>
+                                <h3>{comment.user.username}</h3>
+                                <p>{comment.description}</p>
+                            </div>
+                        )
+                    })
+                }
+            </div>
+            <Button onClick={() => (navigate(`/game-details/${gameId}`))}>Back</Button>
         </div>
         // add conditional button verified by specific user
+
     )
 }
 

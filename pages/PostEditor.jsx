@@ -68,7 +68,11 @@ function PostEditor() {
             editorRef.current?.destroy();
             editorRef.current = null;
         };
+
     }, [post]);
+
+
+
 
     const handleSave = async () => {
         try {

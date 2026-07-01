@@ -12,12 +12,14 @@ import GameForm from "../pages/GameForm"
 import { Route, Routes } from "react-router-dom"
 import PostEditor from "../pages/PostEditor"
 import PostPage from "../pages/PostPage"
+import MyNavbar from "../components/MyNavbar"
 
 
 function App() {
 
   return (
     <>
+      <MyNavbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
