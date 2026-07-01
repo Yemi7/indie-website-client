@@ -13,6 +13,8 @@ import { Route, Routes } from "react-router-dom"
 import PostEditor from "../pages/PostEditor"
 import PostPage from "../pages/PostPage"
 import MyNavbar from "../components/MyNavbar"
+import UserDetails from "../pages/UserDetails"
+import EditUser from "../pages/EditUser"
 
 
 function App() {
@@ -32,9 +34,11 @@ function App() {
         <Route path="/game-details/:gameId" element={<GameDetails />} />
         <Route path="/game-form" element={<GameForm />} />{/* future private route */}
         <Route path="/game-edit/:id/edit" element={<GameForm />} />{/* future private route */}
-        <Route path="/post/create-post/:game" element={<PostEditor />} ></Route>
-        <Route path="/post/edit-post/:post" element={<PostEditor />} ></Route>
-        <Route path="/post/view-post/:post" element={<PostPage />} ></Route>
+        <Route path="/post/create-post/:game" element={<PostEditor />} />
+        <Route path="/post/edit-post/:post" element={<PostEditor />} />
+        <Route path="/post/view-post/:post" element={<PostPage />} />
+        <Route path="/user-details/:user" element={<UserDetails />} />
+        <Route path="/edit-user/:user" element={<EditUser />} />
       </Routes>
     </>
   )

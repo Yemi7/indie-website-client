@@ -6,8 +6,9 @@ const AuthContext = createContext()
 function AuthWrapper(props) {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [loggedUserId, setLoggedUserId] = useState(null)
-
     const [loggedUserRole, setLoggedUserRole] = useState(null)
+    const [loggedUserPfp, setLoggedUserPfp] = useState(null)
+    const [loggedUserEmail, setLoggedUserEmail] = useState(null)
 
     const [isAuthenticating, setIsAuthenticating] = useState(true)
 
@@ -18,6 +19,8 @@ function AuthWrapper(props) {
             setLoggedUserId(null)
             setIsAuthenticating(false)
             setLoggedUserRole(null)
+            setLoggedUserPfp(null)
+            setLoggedUserEmail(null)
             return
         }
         try {
@@ -28,6 +31,8 @@ function AuthWrapper(props) {
             setLoggedUserId(response.data._id)
             setIsAuthenticating(false)
             setLoggedUserRole(response.data.role)
+            setLoggedUserPfp(response.data.profilePic)
+            setLoggedUserEmail(response.data.email)
         } catch (error) {
             console.log(error);
             setIsLoggedIn(false)
@@ -37,24 +42,25 @@ function AuthWrapper(props) {
             return
         }
     }
-    const passedContext = { isLoggedIn, loggedUserId, authenticateUser }
+
+    const passedContext = { isLoggedIn, loggedUserId, loggedUserPfp, loggedUserEmail, authenticateUser }
 
     useEffect(() => {
         authenticateUser()
     }, [])
 
- if(isAuthenticating){
+    if (isAuthenticating) {
         return <h3>is authenticating</h3>
-    } 
+    }
 
-    return(
+    return (
         <AuthContext.Provider value={passedContext}>
             {props.children}
         </AuthContext.Provider>
     )
 }
 
-export{
+export {
     AuthContext,
     AuthWrapper
 }
