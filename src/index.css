@@ -6,3 +6,28 @@ body {
   background-color: rgb(8, 11, 19);
   color: #b8b8b8;
 }
+.codex-editor .ce-header {
+  font-weight: 600;
+  color: #f0f2f7;
+}
+
+.codex-editor h1.ce-header {
+  font-size: 2rem;
+}
+.codex-editor h2.ce-header {
+  font-size: 1.5rem;
+}
+.codex-editor h3.ce-header {
+  font-size: 1.25rem;
+}
+.codex-editor h4.ce-header {
+  font-size: 1.1rem;
+}
+
+.codex-editor .ce-paragraph {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.banner-image {
+  background-image: url("../src/assets/banner.png");
+}

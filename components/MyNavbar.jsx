@@ -23,7 +23,7 @@ function MyNavbar() {
     return (
         <Navbar fluid rounded>
             <NavbarBrand as={Link} to="/">
-                <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Indie Website</span>
+                <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Indie Vault</span>
             </NavbarBrand>
             <div className="flex md:order-2">
                 <Dropdown

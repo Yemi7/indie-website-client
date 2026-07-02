@@ -48,7 +48,13 @@ function PostPage() {
             data: content,
             tools: {
                 // fix header font size being the same
-                header: Header,
+                header: {
+                    class: Header,
+                    config: {
+                        levels: [1, 2, 3, 4],
+                        defaultLevel: 2
+                    }
+                },
                 paragraph: {
                     inlineToolbar: ["link", "bold", "italic"],
                 },
@@ -96,25 +102,54 @@ function PostPage() {
 
 
     return (
-        <div>
-            <h1>{title}</h1>
-            <div ref={holderRef} />
-            <div className="comments">
-                {
-                    comments.map((comment) => {
-                        return (
-                            <div className="comment-item" key={comment._id}>
-                                <h3>{comment.user.username}</h3>
-                                <p>{comment.description}</p>
-                            </div>
-                        )
-                    })
-                }
-            </div>
-            <Button onClick={() => (navigate(`/game-details/${gameId}`))}>Back</Button>
-        </div>
-        // add conditional button verified by specific user
+        <div className="bg-[rgb(8,11,19)] min-h-screen text-[#e2e4ea]">
+            <div className="max-w-3xl mx-auto px-6 py-10">
 
+                {/* Back button */}
+                <button
+                    onClick={() => navigate(`/game-details/${gameId}`)}
+                    className="flex items-center gap-2 text-sm text-[#555c78] hover:text-[#c8ccd8] mb-8"
+                >
+                    ← Back to game
+                </button>
+
+                {/* Title */}
+                <h1 className="text-4xl font-medium text-[#f0f2f7] mb-8">{title}</h1>
+
+                {/* Post content */}
+                <div className="bg-[#0d1020] border border-[#1e2236] rounded-xl p-6 mb-10">
+                    <div ref={holderRef} />
+                </div>
+
+                {/* Comments */}
+                <div>
+                    <p className="text-xs font-medium text-[#555c78] uppercase tracking-widest mb-4">
+                        Comments {comments.length > 0 && `· ${comments.length}`}
+                    </p>
+
+                    {comments.length === 0 ? (
+                        <p className="text-sm text-[#555c78]">No comments yet.</p>
+                    ) : (
+                        <div className="flex flex-col gap-3">
+                            {comments.map((comment) => (
+                                <div
+                                    key={comment._id}
+                                    className="bg-[#0d1020] border border-[#1e2236] rounded-xl px-5 py-4"
+                                >
+                                    <p className="text-sm font-medium text-[#6b8cde] mb-1">
+                                        {comment.user.username}
+                                    </p>
+                                    <p className="text-sm text-[#c8ccd8] leading-relaxed">
+                                        {comment.description}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+            </div>
+        </div>
     )
 }
 

@@ -1,7 +1,5 @@
 import { useState } from 'react'
-import Editor from "../components/Editor"
 import Home from "../pages/Home"
-
 import Login from "../pages/auth/Login"
 import Signup from "../pages/auth/Signup"
 import PrivatePage from "../pages/PrivatePage"

@@ -11,6 +11,7 @@ function GameForm() {
     const [startDate, setStartDate] = useState(null)
     const [expectedRelease, setExpectedRelease] = useState(null)
     const [engine, setEngine] = useState("")
+    const [genre, setGenre] = useState("")
     const [coverUrl, setCoverUrl] = useState(null)
     const [imageUrls, setImageUrls] = useState([])
     const [description, setDescription] = useState("")
@@ -19,6 +20,7 @@ function GameForm() {
 
     const handleTitleChange = (e) => setTitle(e.target.value)
     const handleEngineChange = (e) => setEngine(e.target.value)
+    const handleGenreChange = (e) => setGenre(e.target.value)
     const handleDescriptionChange = (e) => setDescription(e.target.value)
     const handleStartDateChange = (date) => setStartDate(date)
     const handleExpectedReleaseChange = (date) => setExpectedRelease(date)
@@ -42,6 +44,7 @@ function GameForm() {
 
             setTitle(game.title)
             setEngine(game.engine)
+            setGenre(game.genre || "")
             setStartDate(game.startDate ? new Date(game.startDate) : null)
             setExpectedRelease(game.expectedRelease ? new Date(game.expectedRelease) : null)
             setCoverUrl(game.cover)
@@ -62,6 +65,7 @@ function GameForm() {
             startDate,
             expectedRelease,
             engine,
+            genre,
             description,
             cover: coverUrl,
             images: imageUrls,
@@ -153,11 +157,24 @@ function GameForm() {
                         <TextInput
                             id="description"
                             type="text"
-                            placeholder="Game Title"
+                            placeholder="Game Description"
                             value={description}
                             onChange={handleDescriptionChange}
                             required
 
+                        />
+                    </div>
+                    <div>
+                        <div className="mb-2 block">
+                            <Label htmlFor="genre">Genre</Label>
+                        </div>
+                        <TextInput
+                            id="genre"
+                            type="text"
+                            placeholder="Genre"
+                            value={genre}
+                            onChange={handleGenreChange}
+                            required
                         />
                     </div>
                     <div>
