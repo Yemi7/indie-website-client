@@ -6,13 +6,17 @@ import { AuthContext } from "../context/auth.context";
 
 function MyNavbar() {
 
-    const { loggedUserPfp, loggedUserId, loggedUserEmail, authenticateUser } = useContext(AuthContext)
+    const { loggedUserPfp, loggedUserId, loggedUserEmail, authenticateUser, isLoggedIn } = useContext(AuthContext)
 
     const navigate = useNavigate()
 
     const signout = () => {
         localStorage.removeItem("authToken")
         authenticateUser()
+        navigate("/login")
+    }
+
+    const signIn = () => {
         navigate("/login")
     }
 
@@ -32,10 +36,14 @@ function MyNavbar() {
                     <DropdownHeader>
                         <span className="block truncate text-sm font-medium">{loggedUserEmail}</span>
                     </DropdownHeader>
-                    <DropdownItem onClick={() => { navigate(`/user-details/${loggedUserId}`) }} >User Page</DropdownItem>
-                    <DropdownItem onClick={() => { navigate(`/edit-user/${loggedUserId}`) }} >Edit User</DropdownItem>
+                    {isLoggedIn && <DropdownItem onClick={() => { navigate(`/user-details/${loggedUserId}`) }} >User Page</DropdownItem>}
+                    {isLoggedIn && <DropdownItem onClick={() => { navigate(`/edit-user/${loggedUserId}`) }} >Edit User</DropdownItem>}
                     <DropdownDivider />
-                    <DropdownItem onClick={() => { signout() }} >Sign out</DropdownItem>
+                    {
+                        isLoggedIn ?
+                            <DropdownItem onClick={() => { signout() }} >Sign out</DropdownItem> :
+                            <DropdownItem onClick={() => { signIn() }} >Sign In</DropdownItem>
+                    }
                 </Dropdown>
             </div>
             <NavbarToggle />

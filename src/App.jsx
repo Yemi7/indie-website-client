@@ -15,6 +15,7 @@ import PostPage from "../pages/PostPage"
 import MyNavbar from "../components/MyNavbar"
 import UserDetails from "../pages/UserDetails"
 import EditUser from "../pages/EditUser"
+import OnlyPublic from "../components/OnlyPublic"
 
 
 function App() {
@@ -24,21 +25,21 @@ function App() {
       <MyNavbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<OnlyPublic><Login /></OnlyPublic>} />
+        <Route path="/signup" element={<OnlyPublic><Signup /></OnlyPublic>} />
 
         {/* Just testing using a private guard */}
         <Route path="/private" element={<OnlyPrivate> <PrivatePage /> </OnlyPrivate>} />
 
         <Route path="/game-list" element={<GameList />} />
         <Route path="/game-details/:gameId" element={<GameDetails />} />
-        <Route path="/game-form" element={<GameForm />} />{/* future private route */}
-        <Route path="/game-edit/:id/edit" element={<GameForm />} />{/* future private route */}
-        <Route path="/post/create-post/:game" element={<PostEditor />} />
-        <Route path="/post/edit-post/:post" element={<PostEditor />} />
+        <Route path="/game-form" element={<OnlyPrivate><GameForm /></OnlyPrivate>} />
+        <Route path="/game-edit/:id/edit" element={<OnlyPrivate><GameForm /></OnlyPrivate>} />
+        <Route path="/post/create-post/:game" element={<OnlyPrivate><PostEditor /></OnlyPrivate>} />
+        <Route path="/post/edit-post/:post" element={<OnlyPrivate><PostEditor /></OnlyPrivate>} />
         <Route path="/post/view-post/:post" element={<PostPage />} />
-        <Route path="/user-details/:user" element={<UserDetails />} />
-        <Route path="/edit-user/:user" element={<EditUser />} />
+        <Route path="/user-details/:user" element={<OnlyPrivate><UserDetails /></OnlyPrivate>} />
+        <Route path="/edit-user/:user" element={<OnlyPrivate><EditUser /></OnlyPrivate>} />
       </Routes>
     </>
   )
