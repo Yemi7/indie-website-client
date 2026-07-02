@@ -45,6 +45,7 @@ function GameForm() {
             setTitle(game.title)
             setEngine(game.engine)
             setGenre(game.genre || "")
+            setDescription(game.description)
             setStartDate(game.startDate ? new Date(game.startDate) : null)
             setExpectedRelease(game.expectedRelease ? new Date(game.expectedRelease) : null)
             setCoverUrl(game.cover)

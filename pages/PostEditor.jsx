@@ -14,6 +14,7 @@ function PostEditor() {
     const { game, post } = useParams()
 
     const [title, setTitle] = useState("")
+    const [gameId, setGameId] = useState("")
     const API_URL = `${import.meta.env.VITE_SERVER_URL}/api`
     const holderRef = useRef(null)
     const editorRef = useRef(null)
@@ -71,6 +72,7 @@ function PostEditor() {
                 const response = await service.get(`/post/${post}`);
                 const data = response.data
                 setTitle(data.title);
+                setGameId(data.game._id)
                 await editor.render(data.content);
             }
         };
@@ -105,7 +107,7 @@ function PostEditor() {
                 })
                 console.log("post saved: ", response.data);
             }
-            navigate(`/game-details/${game}`)
+            navigate(`/game-details/${isEditing ? gameId : game}`)
         } catch (error) {
             console.log(error);
         }
