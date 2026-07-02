@@ -2,7 +2,6 @@ import { useState } from 'react'
 import Home from "../pages/Home"
 import Login from "../pages/auth/Login"
 import Signup from "../pages/auth/Signup"
-import PrivatePage from "../pages/PrivatePage"
 import OnlyPrivate from "../components/OnlyPrivate"
 import GameList from "../pages/GameList"
 import GameDetails from "../pages/GameDetails"
@@ -14,6 +13,8 @@ import MyNavbar from "../components/MyNavbar"
 import UserDetails from "../pages/UserDetails"
 import EditUser from "../pages/EditUser"
 import OnlyPublic from "../components/OnlyPublic"
+import ErrorPage from "../pages/ErrorPage"
+import NotFound from "../pages/NotFound"
 
 
 function App() {
@@ -26,18 +27,18 @@ function App() {
         <Route path="/login" element={<OnlyPublic><Login /></OnlyPublic>} />
         <Route path="/signup" element={<OnlyPublic><Signup /></OnlyPublic>} />
 
-        {/* Just testing using a private guard */}
-        <Route path="/private" element={<OnlyPrivate> <PrivatePage /> </OnlyPrivate>} />
-
         <Route path="/game-list" element={<GameList />} />
         <Route path="/game-details/:gameId" element={<GameDetails />} />
+        <Route path="/post/view-post/:post" element={<PostPage />} />
+
         <Route path="/game-form" element={<OnlyPrivate><GameForm /></OnlyPrivate>} />
         <Route path="/game-edit/:id/edit" element={<OnlyPrivate><GameForm /></OnlyPrivate>} />
         <Route path="/post/create-post/:game" element={<OnlyPrivate><PostEditor /></OnlyPrivate>} />
         <Route path="/post/edit-post/:post" element={<OnlyPrivate><PostEditor /></OnlyPrivate>} />
-        <Route path="/post/view-post/:post" element={<PostPage />} />
         <Route path="/user-details/:user" element={<OnlyPrivate><UserDetails /></OnlyPrivate>} />
         <Route path="/edit-user/:user" element={<OnlyPrivate><EditUser /></OnlyPrivate>} />
+        <Route path="/error" element={<ErrorPage />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   )

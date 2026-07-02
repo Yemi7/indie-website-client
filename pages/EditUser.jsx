@@ -59,68 +59,97 @@ function EditUser() {
             console.log(error);
         }
     }
-    return (
-        <div>
-            <h1>This it the edit user page</h1>
-            <div className="flex min-h-screen flex-col justify-center items-center">
-                <form onSubmit={handleSubmit} className="flex max-w-md flex-col gap-4" >
-                    <div>
-                        <div className="mb-2 block ">
-                            <Label htmlFor="email">Email</Label>
-                        </div>
-                        <TextInput
-                            id="email"
-                            type="text"
-                            placeholder="Change Email"
-                            value={email}
-                            onChange={handleEmailChange}
+return (
+    <div className="bg-[rgb(8,11,19)] min-h-screen text-[#e2e4ea] flex flex-col items-center justify-center px-6 py-12">
 
-                        />
-                    </div>
-                    <div>
-                        <div className="mb-2 block ">
-                            <Label htmlFor="password">Password</Label>
-                        </div>
-                        <TextInput
-                            id="password"
-                            type="password"
-                            placeholder="Change Password"
-                            value={password}
-                            onChange={handlePasswordChange}
-                        />
-                    </div>
-                    <div>
-                        <div className="mb-2 block ">
-                            <Label htmlFor="bio">Bio</Label>
-                        </div>
-                        <TextInput
-                            id="bio"
-                            type="text"
-                            placeholder="Change Bio"
-                            value={bio}
-                            onChange={handleBioChange}
-                        />
-                    </div>
-                    <div> {/* need to implement a remove image function */}
-                        <Label className="mb-2 block" htmlFor="file-upload-helper-text">
-                            Upload file
-                        </Label>
-                        <FileInput
-                            id="file-upload-helper-text"
-                            name="profile-pic"
-                            accept="image/png,image/jpeg"
-                            onChange={handleProfilePicUpload}
-                            disabled={uploading}
-                        />
-                        <HelperText className="mt-1">JPG or PNG.</HelperText>
-                        {uploading ? <h3>... uploading image</h3> : null}
+        <div className="w-full max-w-md">
 
-                        {profilePic ? (<div><img src={profilePic} alt="img" width={200} /></div>) : null}
-                    </div>
-                    <Button type="submit">Submit</Button>
-                </form>
-            </div>
+            {/* Header */}
+            <h1 className="text-2xl font-medium text-[#f0f2f7] mb-1">Edit profile</h1>
+            <p className="text-sm text-[#555c78] mb-8">Update your account details below</p>
+
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+
+                {/* Email */}
+                <div>
+                    <Label htmlFor="email" className="text-[#8b90a0] text-sm mb-2 block">Email</Label>
+                    <TextInput
+                        id="email"
+                        type="text"
+                        placeholder="Change email"
+                        value={email}
+                        onChange={handleEmailChange}
+                        className="bg-[#0d1020] border-[#1e2236] text-[#c8ccd8] placeholder-[#555c78]"
+                    />
+                </div>
+
+                {/* Password */}
+                <div>
+                    <Label htmlFor="password" className="text-[#8b90a0] text-sm mb-2 block">Password</Label>
+                    <TextInput
+                        id="password"
+                        type="password"
+                        placeholder="Change password"
+                        value={password}
+                        onChange={handlePasswordChange}
+                        className="bg-[#0d1020] border-[#1e2236] text-[#c8ccd8] placeholder-[#555c78]"
+                    />
+                </div>
+
+                {/* Bio */}
+                <div>
+                    <Label htmlFor="bio" className="text-[#8b90a0] text-sm mb-2 block">Bio</Label>
+                    <TextInput
+                        id="bio"
+                        type="text"
+                        placeholder="Change bio"
+                        value={bio}
+                        onChange={handleBioChange}
+                        className="bg-[#0d1020] border-[#1e2236] text-[#c8ccd8] placeholder-[#555c78]"
+                    />
+                </div>
+
+                {/* Profile pic */}
+                <div>
+                    <Label htmlFor="file-upload-helper-text" className="text-[#8b90a0] text-sm mb-2 block">
+                        Profile picture
+                    </Label>
+                    <FileInput
+                        id="file-upload-helper-text"
+                        name="profile-pic"
+                        accept="image/png,image/jpeg"
+                        onChange={handleProfilePicUpload}
+                        disabled={uploading}
+                        className="bg-[#0d1020] border-[#1e2236] text-[#c8ccd8]"
+                    />
+                    <HelperText className="mt-1 text-[#555c78] text-xs">JPG or PNG</HelperText>
+
+                    {uploading && (
+                        <p className="text-sm text-[#6b8cde] mt-2">Uploading image...</p>
+                    )}
+
+                    {profilePic && (
+                        <div className="mt-3">
+                            <img
+                                src={profilePic}
+                                alt="profile preview"
+                                className="w-20 h-20 rounded-full object-cover border-2 border-[#1e2236]"
+                            />
+                        </div>
+                    )}
+                </div>
+
+                {/* Submit */}
+                <Button
+                    type="submit"
+                    className="w-full bg-[#6b8cde] text-white border-none mt-2"
+                >
+                    Save changes
+                </Button>
+
+            </form>
         </div>
-    )
+    </div>
+)
 }
 export default EditUser

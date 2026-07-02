@@ -46,51 +46,79 @@ function Signup() {
     }
 
     return (
-        <div className="flex min-h-screen flex-col justify-center items-center">
-            <h1>Signup Form</h1>
+        <div className="bg-[rgb(8,11,19)] min-h-screen flex items-center justify-center px-6">
+            <div className="w-full max-w-sm">
 
-            <form onSubmit={handleSignup} className="flex max-w-md flex-col gap-4 w-full" >
-                <div>
-                    <div className="mb-2 block">
-                        <label htmlFor="username1">Username:</label>
+                <h1 className="text-2xl font-medium text-[#f0f2f7] mb-1">Create an account</h1>
+                <p className="text-sm text-[#555c78] mb-8">Join Indie Vault and share your games</p>
+
+                <form onSubmit={handleSignup} className="flex flex-col gap-4">
+
+                    <div>
+                        <label htmlFor="username1" className="text-[#8b90a0] text-sm mb-2 block">Username</label>
                         <TextInput
+                            id="username1"
                             type="text"
                             name="username"
+                            placeholder="Your username"
                             value={username}
                             onChange={handleUsernameChange}
+                            className="bg-[#0d1020] border-[#1e2236] text-[#c8ccd8] placeholder-[#555c78]"
                         />
                     </div>
-                </div>
 
-
-                <div>
-                    <div className="mb-2 block">
-                        <label htmlFor="email1">Email:</label>
+                    <div>
+                        <label htmlFor="email1" className="text-[#8b90a0] text-sm mb-2 block">Email</label>
                         <TextInput
+                            id="email1"
                             type="email"
                             name="email"
+                            placeholder="you@example.com"
                             value={email}
                             onChange={handleEmailChange}
+                            className="bg-[#0d1020] border-[#1e2236] text-[#c8ccd8] placeholder-[#555c78]"
                         />
                     </div>
-                </div>
 
-                <div>
-                    <div className="mb-2 block">
-                        <label htmlFor="password1">Password:</label>
+                    <div>
+                        <label htmlFor="password1" className="text-[#8b90a0] text-sm mb-2 block">Password</label>
                         <TextInput
+                            id="password1"
                             type="password"
                             name="password"
+                            placeholder="••••••••"
                             value={password}
                             onChange={handlePasswordChange}
+                            className="bg-[#0d1020] border-[#1e2236] text-[#c8ccd8] placeholder-[#555c78]"
                         />
                     </div>
-                </div>
 
+                    {errorMessage && (
+                        <p className="text-sm text-red-400 bg-[#1a0a0a] border border-[#3d1515] rounded-lg px-3 py-2">
+                            {errorMessage}
+                        </p>
+                    )}
 
-                <Button type="submit" className="m-0">Signup</Button>
-                {errorMessage && <p>{errorMessage}</p>}
-            </form>
+                    <Button type="submit" className="w-full bg-[#6b8cde] text-white border-none mt-1">
+                        Sign up
+                    </Button>
+
+                    <div className="flex items-center gap-3 text-[#555c78] text-xs">
+                        <div className="flex-1 h-px bg-[#1e2236]" />
+                        or
+                        <div className="flex-1 h-px bg-[#1e2236]" />
+                    </div>
+
+                    <Button
+                        color="dark"
+                        className="w-full border border-[#2a3050] text-[#8b90a0] bg-transparent hover:bg-[#0d1020]"
+                        onClick={() => navigate("/login")}
+                    >
+                        Already have an account? Login
+                    </Button>
+
+                </form>
+            </div>
         </div>
     )
 }

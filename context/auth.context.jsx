@@ -9,6 +9,7 @@ function AuthWrapper(props) {
     const [loggedUserRole, setLoggedUserRole] = useState(null)
     const [loggedUserPfp, setLoggedUserPfp] = useState(null)
     const [loggedUserEmail, setLoggedUserEmail] = useState(null)
+    const [isAdmin, setIsAdmin] = useState(false)
 
     const [isAuthenticating, setIsAuthenticating] = useState(true)
 
@@ -21,6 +22,7 @@ function AuthWrapper(props) {
             setLoggedUserRole(null)
             setLoggedUserPfp(null)
             setLoggedUserEmail(null)
+            setIsAdmin(false)
             return
         }
         try {
@@ -33,17 +35,20 @@ function AuthWrapper(props) {
             setLoggedUserRole(response.data.role)
             setLoggedUserPfp(response.data.profilePic)
             setLoggedUserEmail(response.data.email)
+            setIsAdmin(response.data.role === "admin")
         } catch (error) {
             console.log(error);
             setIsLoggedIn(false)
             setLoggedUserId(null)
             setIsAuthenticating(false)
             setLoggedUserRole(null)
+            setIsAdmin(false)
             return
         }
     }
 
-    const passedContext = { isLoggedIn, loggedUserId, loggedUserPfp, loggedUserEmail, authenticateUser }
+
+    const passedContext = { isLoggedIn, loggedUserId, loggedUserPfp, loggedUserEmail, isAdmin, authenticateUser }
 
     useEffect(() => {
         authenticateUser()

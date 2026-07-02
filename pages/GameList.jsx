@@ -26,7 +26,7 @@ function GameList() {
     return (
         <div className="min-h-screen px-4 py-10 text-gray-100 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-7xl">
-                <div className="mb-10 rounded-3x bg-slate-900/70 p-8 shadow-2xl backdrop-blur">
+                <div className="mb-10 rounded-3xl bg-slate-900/70 p-8 shadow-2xl">
                     <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-purple-400">Discover</p>
                     <h1 className="text-4xl font-bold sm:text-5xl">Explore the indie games library</h1>
                     <p className="mt-4 max-w-2xl text-lg text-slate-300">
@@ -39,7 +39,7 @@ function GameList() {
                         gamesArr.map((game) => {
                             return (
                                 <>
-                                    <div key={game._id} onClick={() => { navigate(`/game-details/${game._id}`) }} className="bg-[#0d1020] rounded-xl overflow-hidden w-80 min-h-lg transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-[1.05] hover:shadow-[0_20px_60px_rgba(0,0,0,0.45)] [&>img]:h-48 [&>img]:object-cover">
+                                    <div key={game._id} onClick={() => { navigate(`/game-details/${game._id}`) }} className="bg-[#0d1020] rounded-xl overflow-hidden w-80 min-h-lg transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-[1.05] hover:shadow-[0_20px_60px_rgba(0,0,0,0.45)] [&>img]:h-48 [&>img]:object-cover hover:cursor-pointer">
                                         <img
                                             src={game.cover}
                                             alt={game.title}

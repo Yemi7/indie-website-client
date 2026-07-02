@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react"
 import service from "../services/service.config";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Tabs, TabItem } from "flowbite-react";
 
 function UserDetails() {
+    const { user } = useParams()
 
     const [userObj, setUserObj] = useState(null)
     const [userGames, setUserGames] = useState([])
     const [userComments, setUserComments] = useState([])
-    const { user } = useParams()
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         getUser()
@@ -69,12 +71,13 @@ function UserDetails() {
 
             <div className="tabs max-w-4xl mx-auto px-6 py-6 flex justify-center">
                 <Tabs theme={{
-                    tablist: {base: "flex justify-center border-b border-[#1e2236]"}}} variant="underline" >
+                    tablist: { base: "flex justify-center border-b border-[#1e2236]" }
+                }} variant="underline" >
                     <TabItem title={`Games ${userGames.length}`}>
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                             {
                                 userGames.map((game) => (
-                                    <div key={game._id} className="bg-[#0d1020] border border-[#1e2236] rounded-xl overflow-hidden">
+                                    <div onClick={() => { navigate(`/game-details/${game._id}`) }} key={game._id} className="bg-[#0d1020] border border-[#1e2236] rounded-xl overflow-hidden hover:cursor-pointer">
                                         <img
                                             src={game.cover}
                                             alt={game.title}
