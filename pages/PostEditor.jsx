@@ -97,6 +97,10 @@ function PostEditor() {
     console.log("game param", game);
 
     const handleSave = async () => {
+        if (!title.trim()) {
+            setErrorMessage("Please enter a title for your post.")
+            return
+        }
         try {
             const content = await editorRef.current.save()
             if (isEditing) {
@@ -120,9 +124,13 @@ function PostEditor() {
                 setErrorMessage("You are not allowed to create a post for this game.")
                 return
             }
+            if (error.response && error.response.status === 400) {
+                setErrorMessage(error.response.data.message || "Please enter a title for your post.")
+                return
+            }
             navigate("/error")
-        }
 
+        }
     }
 
 
