@@ -10,6 +10,7 @@ function Signup() {
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [signingUp, setSigningUp] = useState(false)
 
     const [errorMessage, setErrorMessage] = useState("")
 
@@ -19,12 +20,13 @@ function Signup() {
 
     const handleSignup = async (e) => {
         e.preventDefault();
-
+        setSigningUp(true)
         //stops unneeded request to the backend
         if (!email || !password || !username) {
             setErrorMessage("Please enter all fields")
+            setSigningUp(false)
         }
-
+        setSigningUp(true)
         try {
             const body = {
                 username,
@@ -41,7 +43,10 @@ function Signup() {
             console.log(error);
             if (error.response && error.response.status === 400) {
                 setErrorMessage(error.response.data.message)
+                setSigningUp(false)
+                return
             }
+            navigate("/error")
         }
     }
 
@@ -99,7 +104,11 @@ function Signup() {
                         </p>
                     )}
 
-                    <Button type="submit" className="w-full bg-[#6b8cde] text-white border-none mt-1">
+                    <Button
+                        type="submit"
+                        className="w-full bg-[#6b8cde] text-white border-none mt-1"
+                        disabled={signingUp}
+                    >
                         Sign up
                     </Button>
 

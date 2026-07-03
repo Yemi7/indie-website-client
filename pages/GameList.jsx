@@ -2,6 +2,8 @@ import { useContext, useEffect, useState } from "react"
 import service from "../services/service.config"
 import { Route, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
+import LoadingSpinner from "../components/LoadingSpinner"
+
 
 function GameList() {
     const navigate = useNavigate()
@@ -16,12 +18,20 @@ function GameList() {
     }, [])
 
     const getGames = async () => {
-        const gamesRequest = await service.get("/game")
-        const gamesData = gamesRequest.data
-        // gamesData contains an array of all the games in the database
-        setGamesArr(gamesData)
-        setLoading(false)
+        try {
+            const gamesRequest = await service.get("/game")
+            const gamesData = gamesRequest.data
+            // gamesData contains an array of all the games in the database
+            setGamesArr(gamesData)
+            setLoading(false)
+
+        } catch (error) {
+            console.log(error);
+            navigate("/error")
+        }
     }
+
+    if (loading) return <LoadingSpinner />
 
     return (
         <div className="min-h-screen px-4 py-10 text-gray-100 sm:px-6 lg:px-8">

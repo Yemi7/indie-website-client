@@ -16,12 +16,6 @@ function ErrorPage() {
                 </p>
                 <div className="flex gap-3 justify-center">
                     <button
-                        onClick={() => window.location.reload()}
-                        className="px-4 py-2 text-sm text-[#8b90a0] border border-[#2a3050] rounded-lg hover:bg-[#0d1020]"
-                    >
-                        Try again
-                    </button>
-                    <button
                         onClick={() => navigate("/")}
                         className="px-4 py-2 text-sm text-white bg-[#6b8cde] hover:bg-[#5a7bcd] rounded-lg"
                     >

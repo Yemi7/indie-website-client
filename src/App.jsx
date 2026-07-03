@@ -35,7 +35,7 @@ function App() {
         <Route path="/game-edit/:id/edit" element={<OnlyPrivate><GameForm /></OnlyPrivate>} />
         <Route path="/post/create-post/:game" element={<OnlyPrivate><PostEditor /></OnlyPrivate>} />
         <Route path="/post/edit-post/:post" element={<OnlyPrivate><PostEditor /></OnlyPrivate>} />
-        <Route path="/user-details/:user" element={<OnlyPrivate><UserDetails /></OnlyPrivate>} />
+        <Route path="/user-details/:user" element={<UserDetails />} />
         <Route path="/edit-user/:user" element={<OnlyPrivate><EditUser /></OnlyPrivate>} />
         <Route path="/error" element={<ErrorPage />} />
         <Route path="*" element={<NotFound />} />

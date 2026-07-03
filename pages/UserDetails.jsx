@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import service from "../services/service.config";
 import { useNavigate, useParams } from "react-router-dom";
 import { Tabs, TabItem } from "flowbite-react";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 function UserDetails() {
     const { user } = useParams()
@@ -24,6 +25,7 @@ function UserDetails() {
             setUserObj(response.data)
         } catch (error) {
             console.log(error)
+            navigate("/error")
         }
     }
 
@@ -33,6 +35,7 @@ function UserDetails() {
             setUserGames(response.data)
         } catch (error) {
             console.log(error)
+            navigate("/error")
         }
     }
 
@@ -42,6 +45,7 @@ function UserDetails() {
             setUserComments(response.data)
         } catch (error) {
             console.log(error)
+            navigate("/error")
         }
     }
 
@@ -49,7 +53,7 @@ function UserDetails() {
         const convertedDate = new Date(dateInput)
         return convertedDate.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })
     }
-    if (!userObj) return <h1 className="text-center mt-20 text-[#8b90a0]">Loading...</h1>
+    if (!userObj) return <LoadingSpinner />
 
     return (
         <div className="bg-[rgb(8,11,19)] min-h-screen text-[#e2e4ea]">

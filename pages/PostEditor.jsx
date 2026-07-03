@@ -7,19 +7,21 @@ import { useNavigate, useParams } from "react-router-dom"
 import Header from "@editorjs/header"
 import ImageTool from "@editorjs/image"
 import LinkTool from '@editorjs/link';
+import LoadingSpinner from "../components/LoadingSpinner"
 
 
 function PostEditor() {
 
     const { game, post } = useParams()
 
+    const isEditing = Boolean(post)
     const [title, setTitle] = useState("")
     const [gameId, setGameId] = useState("")
+    const [errorMessage, setErrorMessage] = useState("")
     const API_URL = `${import.meta.env.VITE_SERVER_URL}/api`
     const holderRef = useRef(null)
     const editorRef = useRef(null)
     // if there isn't a post we are creating
-    const isEditing = Boolean(post)
     const navigate = useNavigate()
 
 
@@ -69,11 +71,16 @@ function PostEditor() {
             await editor.isReady;
 
             if (post) {
-                const response = await service.get(`/post/${post}`);
-                const data = response.data
-                setTitle(data.title);
-                setGameId(data.game._id)
-                await editor.render(data.content);
+                try {
+                    const response = await service.get(`/post/${post}`);
+                    const data = response.data
+                    setTitle(data.title);
+                    setGameId(data.game._id)
+                    await editor.render(data.content);
+                } catch (error) {
+                    console.log(error);
+                    navigate("/error")
+                }
             }
         };
 
@@ -109,10 +116,15 @@ function PostEditor() {
             }
             navigate(`/game-details/${isEditing ? gameId : game}`)
         } catch (error) {
-            console.log(error);
+            if (error.response && error.response.status === 403) {
+                setErrorMessage("You are not allowed to create a post for this game.")
+                return
+            }
+            navigate("/error")
         }
 
     }
+
 
 
     return (
@@ -139,10 +151,15 @@ function PostEditor() {
                 />
 
                 {/* Editor */}
+
                 <div className="bg-[#0d1020] border border-[#1e2236] rounded-xl p-6 min-h-[420px]">
                     <div ref={holderRef} />
                 </div>
-
+                {errorMessage && (
+                    <p className="text-sm text-red-400 bg-[#1a0a0a] border border-[#3d1515] rounded-lg px-3 py-2 mt-4">
+                        {errorMessage}
+                    </p>
+                )}
             </div>
         </div>
     )

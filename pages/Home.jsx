@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react"
 import service from "../services/service.config"
 import bannerImg from "../src/assets/banner.png"
+import LoadingSpinner from "../components/LoadingSpinner"
+
 import {
     Avatar,
     Button,
     List,
     ListItem,
+    Spinner,
     Timeline,
     TimelineBody,
     TimelineContent,
@@ -15,13 +18,16 @@ import {
     TimelineTitle,
 } from "flowbite-react";
 import { HiCalendar } from "react-icons/hi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 function Home() {
+    const navigate = useNavigate()
 
     const [games, setGames] = useState([])
     const [posts, setPosts] = useState([])
+    const [loadingGames, setLoadingGames] = useState(true)
+    const [loadingPosts, setLoadingPosts] = useState(true)
 
     useEffect(() => {
         getGames()
@@ -34,8 +40,10 @@ function Home() {
 
             const data = response.data
             setGames(response.data)
+            setLoadingGames(false)
         } catch (error) {
             console.log(error)
+            navigate("/error")
         }
     }
 
@@ -45,8 +53,10 @@ function Home() {
             console.log(response.data);
             const data = response.data
             setPosts(data)
+            setLoadingPosts(false)
         } catch (error) {
             console.log(error);
+            navigate("/error")
         }
     }
     const getDate = (createdDate) => {
@@ -60,6 +70,8 @@ function Home() {
 
         return `${year} ${month} ${day}, ${hours}:${mins}`
     }
+
+    if (loadingGames || loadingPosts) return <LoadingSpinner />
 
     return (
         <div className="bg-[rgb(8,11,19)] min-h-screen text-[#e2e4ea]">

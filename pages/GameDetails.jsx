@@ -1,8 +1,9 @@
 import { useContext, useEffect, useState } from "react"
 import service from "../services/service.config"
-import { Button, Carousel } from "flowbite-react"
+import { Button, Carousel, Spinner } from "flowbite-react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { AuthContext } from "../context/auth.context"
+import LoadingSpinner from "../components/LoadingSpinner"
 
 function GameDetails() {
 
@@ -29,6 +30,7 @@ function GameDetails() {
             setLoading(false)
         } catch (error) {
             console.log(error);
+            navigate("/error")
         }
     }
 
@@ -39,6 +41,7 @@ function GameDetails() {
             setLoadingPost(false)
         } catch (error) {
             console.log(error);
+            navigate("/error")
         }
     }
 
@@ -48,6 +51,7 @@ function GameDetails() {
             navigate("/game-list")
         } catch (error) {
             console.log(error)
+            navigate("/error")
         }
     }
 
@@ -69,9 +73,7 @@ function GameDetails() {
         return `${Math.floor(days / 365)} years ago`;
     }
 
-    if (loading || loadingPost) {
-        return <h1 className="text-center mt-20 text-[#8b90a0]">Loading...</h1>
-    }
+    if (loading || loadingPost) return <LoadingSpinner />
 
     return (
         <div className="max-w-4xl mx-auto px-6 py-8">

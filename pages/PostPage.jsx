@@ -5,6 +5,8 @@ import ImageTool from "@editorjs/image";
 import service from "../services/service.config";
 import { useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
+import { Spinner } from "flowbite-react";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 function PostPage() {
     const API_URL = import.meta.env.VITE_API_URL
@@ -25,25 +27,37 @@ function PostPage() {
     const [editingText, setEditingText] = useState("")
     const [confirmingDeleteId, setConfirmingDeleteId] = useState(null)
     const [confirmingDeletePost, setConfirmingDeletePost] = useState(false)
+    const [errorMessage, setErrorMessage] = useState("")
+    const [loadingPost, setLoadingPost] = useState(true)
+    const [loadingComments, setLoadingComments] = useState(true)
+
 
     const navigate = useNavigate()
 
     useEffect(() => {
         if (!post) return
-        if (editorRef.current) return
         const loadPost = async () => {
-            const response = await service.get(`/post/${post}`);
-            const data = response.data
-            setTitle(data.title)
-            setContent(data.content)
-            setGameId(data.game._id)
-            setPostUserId(data.user._id)
+            try {
+                console.log("Loading post...");
+                const response = await service.get(`/post/${post}`);
+                const data = response.data
+                setTitle(data.title)
+                setContent(data.content)
+                setGameId(data.game._id)
+                setPostUserId(data.user._id)
+
+
+            } catch (error) {
+                console.log(error);
+                navigate("/error")
+            }
         };
         loadPost();
         getComments()
     }, [post]);
 
     useEffect(() => {
+        console.log(content);
         if (!holderRef.current || !content) return;
         if (editorRef.current) {
             editorRef.current.destroy();
@@ -75,19 +89,28 @@ function PostPage() {
         });
 
         editorRef.current = editor;
+
+        editor.isReady.then(() => {
+            setLoadingPost(false)
+        })
+
         return () => {
-            if (editorRef.current?.destroy) editorRef.current.destroy();
+            editorRef.current?.destroy();
             editorRef.current = null;
-            if (holderRef.current) holderRef.current.innerHTML = "";
         };
+
+
     }, [content]);
 
     const getComments = async () => {
         try {
             const response = await service.get(`/comment/${post}/by-post`)
             setComments(response.data);
+            setLoadingComments(false)
         } catch (error) {
             console.log(error)
+            console.log("comments error", error)
+            navigate("/error")
         }
     }
 
@@ -101,10 +124,16 @@ function PostPage() {
             })
             setNewComment("")
             await getComments()
-        } catch (error) {
-            console.log(error)
-        } finally {
             setSubmitting(false)
+
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                setErrorMessage("You must be logged in to comment.")
+                setSubmitting(false)
+                return
+            }
+            setSubmitting(false)
+            navigate("/error")
         }
     }
 
@@ -113,7 +142,11 @@ function PostPage() {
             await service.delete(`/comment/${commentId}`)
             await getComments()
         } catch (error) {
-            console.log(error)
+            if (error.response && error.response.status === 403) {
+                setErrorMessage("You are not allowed to do that.")
+                return
+            }
+            navigate("/error")
         }
     }
 
@@ -127,7 +160,11 @@ function PostPage() {
             setEditingText("")
             await getComments()
         } catch (error) {
-            console.log(error)
+            if (error.response && error.response.status === 403) {
+                setErrorMessage("You are not allowed to do that.")
+                return
+            }
+            navigate("/error")
         }
     }
 
@@ -137,6 +174,7 @@ function PostPage() {
             navigate(`/game-details/${gameId}`)
         } catch (error) {
             console.log(error)
+            navigate("/error")
         }
     }
 
@@ -206,6 +244,11 @@ function PostPage() {
 
                     {/* Add comment */}
                     <div className="bg-[#0d1020] border border-[#1e2236] rounded-xl px-5 py-4 mb-4">
+                        {errorMessage && (
+                            <p className="text-sm text-red-400 bg-[#1a0a0a] border border-[#3d1515] rounded-lg px-3 py-2 mb-4">
+                                {errorMessage}
+                            </p>
+                        )}
                         <textarea
                             value={newComment}
                             onChange={(e) => setNewComment(e.target.value)}

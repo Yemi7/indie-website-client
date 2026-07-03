@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react"
 import service from "../services/service.config"
-import { Button, Datepicker, Label, TextInput, FileInput, HelperText } from "flowbite-react";
+import { Button, Datepicker, Label, TextInput, FileInput, HelperText, Spinner } from "flowbite-react";
 import { useNavigate, useParams } from "react-router-dom";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 function GameForm() {
     // add description
@@ -17,6 +18,8 @@ function GameForm() {
     const [description, setDescription] = useState("")
     const [uploading, setUploading] = useState(false)
     const [uploadingMany, setUploadingMany] = useState(false)
+    const [errorMessage, setErrorMessage] = useState("")
+    const [loadingGame, setLoadingGame] = useState(isEditing)
 
     const handleTitleChange = (e) => setTitle(e.target.value)
     const handleEngineChange = (e) => setEngine(e.target.value)
@@ -50,14 +53,16 @@ function GameForm() {
             setExpectedRelease(game.expectedRelease ? new Date(game.expectedRelease) : null)
             setCoverUrl(game.cover)
             setImageUrls(game.images || [])
-
+            setLoadingGame(false)
         } catch (error) {
             console.log(error);
+            navigate("/error")
         }
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setErrorMessage("")
 
 
 
@@ -73,6 +78,7 @@ function GameForm() {
         }
         try {
             if (isEditing) {
+
                 const response = await service.patch(`/game/${id}`, body)
             } else {
 
@@ -81,8 +87,15 @@ function GameForm() {
             setCreating(false)
             navigate("/game-list")
         } catch (error) {
-            // need to create error handler similar to login and signup for incorrect image formats
-            console.log(error);
+            if (error.response && error.response.status === 400) {
+                setErrorMessage(error.response.data.message)
+                return
+            }
+            if (error.response && error.response.status === 403) {
+                setErrorMessage("You are not allowed to do that.")
+                return
+            }
+            navigate("/error")
         }
 
     }
@@ -102,7 +115,13 @@ function GameForm() {
             setCoverUrl(response.data.imageUrl)
             setUploading(false)
         } catch (error) {
-            console.log(error);
+            if (error.response && error.response.status === 400) {
+                setErrorMessage(error.response.data.errorMessage || "Upload failed. Check image format and size.")
+                setUploading(false)
+                return
+            }
+            setUploading(false)
+            navigate("/error")
         }
 
     }
@@ -127,10 +146,19 @@ function GameForm() {
                 ...prevUrls, ...response.data.imageUrls,
             ])
             setUploadingMany(false)
+
         } catch (error) {
-            console.log(error);
+            if (error.response && error.response.status === 400) {
+                setErrorMessage(error.response.data.errorMessage || "Upload failed. Check image format and size.")
+                setUploadingMany(false)
+                return
+            }
+            setUploadingMany(false)
+            navigate("/error")
         }
     }
+
+    if (loadingGame) return <LoadingSpinner />
 
     return (
         <div className="bg-[rgb(8,11,19)] min-h-screen text-[#e2e4ea] px-6 py-12">
@@ -311,6 +339,11 @@ function GameForm() {
                     >
                         {isEditing ? "Save changes" : "Create game"}
                     </Button>
+                    {errorMessage && (
+                        <p className="text-sm text-red-400 bg-[#1a0a0a] border border-[#3d1515] rounded-lg px-3 py-2">
+                            {errorMessage}
+                        </p>
+                    )}
 
                 </form>
             </div>
