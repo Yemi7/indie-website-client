@@ -3,7 +3,7 @@ import EditorJS from "@editorjs/editorjs";
 import Header from "@editorjs/header";
 import ImageTool from "@editorjs/image";
 import service from "../services/service.config";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
 import { Spinner } from "flowbite-react";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -295,9 +295,11 @@ function PostPage() {
                                     className="bg-[#0d1020] border border-[#1e2236] rounded-xl px-5 py-4"
                                 >
                                     <div className="flex items-center justify-between mb-1">
-                                        <p className="text-sm font-medium text-[#6b8cde]">
-                                            {comment.user.username}
-                                        </p>
+                                        <Link to={`/user-details/${comment.user._id}`} >
+                                            <p className="text-sm font-medium text-[#6b8cde]">
+                                                {comment.user.username}
+                                            </p>
+                                        </Link>
 
                                         {(loggedUserId === comment.user._id || isAdmin) && (
                                             <div className="flex gap-2">
