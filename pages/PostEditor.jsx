@@ -12,19 +12,31 @@ import LoadingSpinner from "../components/LoadingSpinner"
 
 function PostEditor() {
 
+    // current route params for the selected game and post
     const { game, post } = useParams()
 
+    // checks if the user is editing an existing post
     const isEditing = Boolean(post)
+
+    // stores the post title and the game id for redirects
     const [title, setTitle] = useState("")
     const [gameId, setGameId] = useState("")
+
+    // tracks validation errors for the post form
     const [errorMessage, setErrorMessage] = useState("")
+
+    // base api url used for editor uploads and post requests
     const API_URL = `${import.meta.env.VITE_SERVER_URL}/api`
+
+    // references the editor container and editor instance
     const holderRef = useRef(null)
     const editorRef = useRef(null)
-    // if there isn't a post we are creating
+
+    // redirects the user after saving or when an error happens
     const navigate = useNavigate()
 
 
+    // initializes the editor and loads existing content when editing
     useEffect(() => {
         if (!holderRef.current) return;
 
@@ -69,7 +81,6 @@ function PostEditor() {
             editorRef.current = editor;
 
             await editor.isReady;
-
             if (post) {
                 try {
                     const response = await service.get(`/post/${post}`);
@@ -96,6 +107,7 @@ function PostEditor() {
 
     console.log("game param", game);
 
+    // saves the current post content and redirects to the game details page
     const handleSave = async () => {
         if (!title.trim()) {
             setErrorMessage("Please enter a title for your post.")
@@ -149,7 +161,7 @@ function PostEditor() {
                     </Button>
                 </div>
 
-                {/* Title */}
+                {/* Title input */}
                 <input
                     type="text"
                     placeholder="Post title..."
@@ -158,11 +170,11 @@ function PostEditor() {
                     className="w-full bg-transparent border-0 border-b border-[#1e2236] outline-none text-3xl font-medium text-[#f0f2f7] placeholder-[#2a3050] pb-4 mb-6 focus:ring-0"
                 />
 
-                {/* Editor */}
-
+                {/* Editor block */}
                 <div className="bg-[#0d1020] border border-[#1e2236] rounded-xl p-6 min-h-[420px]">
                     <div ref={holderRef} />
                 </div>
+                {/* Error message */}
                 {errorMessage && (
                     <p className="text-sm text-red-400 bg-[#1a0a0a] border border-[#3d1515] rounded-lg px-3 py-2 mt-4">
                         {errorMessage}

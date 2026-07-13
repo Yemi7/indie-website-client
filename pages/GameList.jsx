@@ -7,22 +7,32 @@ import LoadingSpinner from "../components/LoadingSpinner"
 
 function GameList() {
     const navigate = useNavigate()
+
+    // user id received from universal AuthContext
     const { loggedUserId } = useContext(AuthContext)
 
     // get the games
     const [gamesArr, setGamesArr] = useState([]);
+
+    // async consideration state
     const [loading, setLoading] = useState(true)
 
+    // On a new load it carries out the getGames function
     useEffect(() => {
         getGames();
     }, [])
 
+    // fetches a list of all uploaded games in the database
     const getGames = async () => {
         try {
             const gamesRequest = await service.get("/game")
             const gamesData = gamesRequest.data
             // gamesData contains an array of all the games in the database
+
+            // sets gamesArr with an array of all games
             setGamesArr(gamesData)
+
+            // clears async consideration state
             setLoading(false)
 
         } catch (error) {
@@ -31,11 +41,14 @@ function GameList() {
         }
     }
 
+    // if fetching the games, returns a spinner to let the user know it's loading
     if (loading) return <LoadingSpinner />
 
     return (
         <div className="min-h-screen px-4 py-10 text-gray-100 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-7xl">
+
+                {/* Banner */}
                 <div className="mb-10 rounded-3xl bg-slate-900/70 p-8 shadow-2xl">
                     <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-purple-400">Discover</p>
                     <h1 className="text-4xl font-bold sm:text-5xl">Explore the indie games library</h1>
@@ -44,7 +57,10 @@ function GameList() {
                     </p>
                 </div>
 
+                {/* Games List */}
                 <div className="flex flex-wrap justify-center gap-6">
+
+                    {/* renders an array of all of the games, styled as cards */}
                     {
                         gamesArr.map((game) => {
                             return (

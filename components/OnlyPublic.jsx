@@ -6,7 +6,7 @@ function OnlyPublic(props) {
 
 
     const { isLoggedIn } = useContext(AuthContext)
-
+    // returns the page in props only when the user is logged out
     if (!isLoggedIn) {
         return props.children // show the page
     } else {

@@ -4,10 +4,16 @@ import { Button, Datepicker, Label, TextInput, FileInput, HelperText, Spinner } 
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
 
+// this game form page is used both for creating a new game, and editing an existing game
 function GameForm() {
-    // add description
+
+    // game id recived from dynamic link (only in the instance of editing)
     const { id } = useParams()
+
+    // if there is no id, it means this page wasn't reached through a dynamic link, and a new game is being created. So editing will be false
     const isEditing = Boolean(id)
+
+    // game detail state
     const [title, setTitle] = useState("")
     const [startDate, setStartDate] = useState(null)
     const [expectedRelease, setExpectedRelease] = useState(null)
@@ -16,35 +22,48 @@ function GameForm() {
     const [coverUrl, setCoverUrl] = useState(null)
     const [imageUrls, setImageUrls] = useState([])
     const [description, setDescription] = useState("")
+
+    // async considerationg states
     const [uploading, setUploading] = useState(false)
     const [uploadingMany, setUploadingMany] = useState(false)
-    const [errorMessage, setErrorMessage] = useState("")
     const [loadingGame, setLoadingGame] = useState(isEditing)
 
+    // error message recieved from backend
+    const [errorMessage, setErrorMessage] = useState("")
+
+    // stores user input changes
     const handleTitleChange = (e) => setTitle(e.target.value)
     const handleEngineChange = (e) => setEngine(e.target.value)
     const handleGenreChange = (e) => setGenre(e.target.value)
     const handleDescriptionChange = (e) => setDescription(e.target.value)
     const handleStartDateChange = (date) => setStartDate(date)
     const handleExpectedReleaseChange = (date) => setExpectedRelease(date)
-    // const handleCoverChange = (e) => setCover(e.target.value)
-    // const handleImagesChange = (e) => setImages(e.target.value)
 
+    // async considerationg for creating a game
     const [creating, setCreating] = useState(false)
 
     const navigate = useNavigate()
 
     useEffect(() => {
+        // if not editing, do not fetch a game, since there is no id to avoid error
         if (!isEditing) return
+        // if the id changes, or the editing variable changes, the new game will be fetched from the backend.
         fetchGame()
     }, [id, isEditing])
 
+    // fetches game from backend
     const fetchGame = async () => {
+
         try {
+            // starts async consideration state
+            setLoadingGame(true)
+
+            // fetches game from backend using game id from dynamic link
             const response = await service.get(`/game/${id}`)
             const game = response.data
             console.log(response.data);
 
+            // setting the input states to existing values for easier user flow when editing the game details
             setTitle(game.title)
             setEngine(game.engine)
             setGenre(game.genre || "")
@@ -53,19 +72,23 @@ function GameForm() {
             setExpectedRelease(game.expectedRelease ? new Date(game.expectedRelease) : null)
             setCoverUrl(game.cover)
             setImageUrls(game.images || [])
+
+            // clears async consideration state
             setLoadingGame(false)
         } catch (error) {
+            // if there is a backend error it sends the user to the error page
             console.log(error);
             navigate("/error")
         }
     }
-
+    // submits the updated data to the server to be posted or patched in the database
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setCreating(true)
         setErrorMessage("")
 
 
-
+        // contains user input data
         const body = {
             title,
             startDate,
@@ -76,14 +99,19 @@ function GameForm() {
             cover: coverUrl,
             images: imageUrls,
         }
+
+
         try {
+            // if editing, the body is patched to an existing game using the truthy gameId in the dynamic link
             if (isEditing) {
 
                 const response = await service.patch(`/game/${id}`, body)
             } else {
-
+                // if not editing the data is posted as a new game to the server the database
                 const response = await service.post("/game", body)
             }
+
+            // clears the async consideration state
             setCreating(false)
             navigate("/game-list")
         } catch (error) {
@@ -100,64 +128,92 @@ function GameForm() {
 
     }
 
+
+    // handles the user uploading a cover of their own to cloudinary
     const handleCoverUpload = async (e) => {
         if (!e.target.files[0]) {
             return
         }
-
+        // sets async consideration to disable upload button while a picture is uploading
         setUploading(true)
 
+        // creates and appends the image the user uploads
         const uploadData = new FormData()
         uploadData.append("image", e.target.files[0])
 
         try {
+            // uploads the image to multer storage in the server
             const response = await service.post("/upload/upload-one", uploadData)
+
+            // sets the recieved cloudinary url to the state
+
             setCoverUrl(response.data.imageUrl)
+
+            // clears the async consideration state
             setUploading(false)
         } catch (error) {
+            // if the user uploads an incorrect file type, sets the conditional error message and renders it under the form
             if (error.response && error.response.status === 400) {
                 setErrorMessage(error.response.data.errorMessage || "Upload failed. Check image format and size.")
+
+                // clears the async consideration state
                 setUploading(false)
                 return
             }
+
+            // sends the user to the error screen on generic errors
             setUploading(false)
             navigate("/error")
         }
 
     }
-
+    // handles the user uploading games images of their own to cloudinary
     const handleImagesUpload = async (e) => {
         const files = Array.from(e.target.files)
         if (!files.length) {
             return
         }
-
+        // sets async consideration to true
         setUploadingMany(true)
-        const uploadData = new FormData();
 
+        // creates and appends each new image the user uploads
+        const uploadData = new FormData();
         files.forEach((file) => {
             uploadData.append("images", file)
         })
 
         try {
+            // uploads all images to multer storage
             const response = await service.post("/upload/upload-many", uploadData)
             console.log("New Added Image" + response.data);
+
+            // sets the array of image urls for the user to see each image
             setImageUrls((prevUrls) => [
                 ...prevUrls, ...response.data.imageUrls,
             ])
+
+            // clears the async consideration state
             setUploadingMany(false)
 
         } catch (error) {
+            // if the user uploads an incorrect file type, sets the conditional error message and renders it under the form
             if (error.response && error.response.status === 400) {
                 setErrorMessage(error.response.data.errorMessage || "Upload failed. Check image format and size.")
+
+                // clears the async consideration state
                 setUploadingMany(false)
                 return
             }
+
+            // clears the async consideration state
             setUploadingMany(false)
+
+            // sends the user to the error screen on generic errors
             navigate("/error")
         }
     }
 
+    // sets a loading spinner when a game is being fetched
     if (loadingGame) return <LoadingSpinner />
 
     return (
@@ -278,7 +334,11 @@ function GameForm() {
                             disabled={uploading}
                         />
                         <HelperText className="mt-1 text-[#555c78] text-xs">JPG or PNG</HelperText>
+
+                        {/* conditional render for when an image is uploading */}
                         {uploading && <p className="text-sm text-[#6b8cde] mt-2">Uploading...</p>}
+
+                        {/* conditionally renders an image when a user uploads one */}
                         {coverUrl && (
                             <div className="relative inline-block mt-3">
                                 <img
@@ -309,7 +369,11 @@ function GameForm() {
                             disabled={uploadingMany}
                         />
                         <HelperText className="mt-1 text-[#555c78] text-xs">Up to 5 JPG or PNG images</HelperText>
+
+                        {/* conditional render for when an image is uploading */}
                         {uploadingMany && <p className="text-sm text-[#6b8cde] mt-2">Uploading...</p>}
+
+                        {/* conditionally renders an array of images that the user has uploaded */}
                         {imageUrls.length > 0 && (
                             <div className="flex flex-wrap gap-3 mt-3">
                                 {imageUrls.map((url, i) => (

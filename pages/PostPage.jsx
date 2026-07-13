@@ -9,31 +9,43 @@ import { Spinner } from "flowbite-react";
 import LoadingSpinner from "../components/LoadingSpinner";
 
 function PostPage() {
+    // base url used for editor image uploads
     const API_URL = import.meta.env.VITE_API_URL
+
+    // authenticated user info for action permissions
     const { loggedUserId, isAdmin } = useContext(AuthContext)
 
+    // current post id from the route params
     const { post } = useParams()
 
+    // references the editor container and editor instance
     const holderRef = useRef(null);
     const editorRef = useRef(null);
+
+    // stores the post content, title, and related ids
     const [content, setContent] = useState(null);
     const [title, setTitle] = useState("")
     const [comments, setComments] = useState([])
     const [gameId, setGameId] = useState("")
     const [postUserId, setPostUserId] = useState(null)
+
+    // manages comment input and editing state
     const [newComment, setNewComment] = useState("")
     const [submitting, setSubmitting] = useState(false)
     const [editingCommentId, setEditingCommentId] = useState(null)
     const [editingText, setEditingText] = useState("")
     const [confirmingDeleteId, setConfirmingDeleteId] = useState(null)
     const [confirmingDeletePost, setConfirmingDeletePost] = useState(false)
+
+    // tracks errors and loading states for the post and comments
     const [errorMessage, setErrorMessage] = useState("")
     const [loadingPost, setLoadingPost] = useState(true)
     const [loadingComments, setLoadingComments] = useState(true)
 
-
+    // redirects the user after navigation actions or failures
     const navigate = useNavigate()
 
+    // loads the post details when the route param changes
     useEffect(() => {
         if (!post) return
         const loadPost = async () => {
@@ -56,6 +68,7 @@ function PostPage() {
         getComments()
     }, [post]);
 
+    // renders the post content in read-only editor mode
     useEffect(() => {
         console.log(content);
         if (!holderRef.current || !content) return;
@@ -102,6 +115,7 @@ function PostPage() {
 
     }, [content]);
 
+    // fetches the comments for the current post
     const getComments = async () => {
         try {
             const response = await service.get(`/comment/${post}/by-post`)
@@ -114,6 +128,7 @@ function PostPage() {
         }
     }
 
+    // adds a new comment to the current post
     const handleAddComment = async () => {
         if (!newComment.trim()) return
         setSubmitting(true)
@@ -137,6 +152,7 @@ function PostPage() {
         }
     }
 
+    // deletes a comment if the user has permission
     const handleDeleteComment = async (commentId) => {
         try {
             await service.delete(`/comment/${commentId}`)
@@ -150,6 +166,7 @@ function PostPage() {
         }
     }
 
+    // updates an existing comment when the user edits it
     const handleEditComment = async (commentId) => {
         if (!editingText.trim()) return
         try {
@@ -168,6 +185,7 @@ function PostPage() {
         }
     }
 
+    // removes the current post and sends the user back to the game page
     const handleDeletePost = async () => {
         try {
             await service.delete(`/post/${post}`)
@@ -190,7 +208,7 @@ function PostPage() {
                     ← Back to game
                 </button>
 
-                {/* Title + post actions */}
+                {/* Title and post actions */}
                 <div className="flex items-start justify-between gap-4 mb-8">
                     <h1 className="text-4xl font-medium text-[#f0f2f7]">{title}</h1>
                     <div className="flex gap-2 shrink-0 mt-1">
@@ -236,13 +254,13 @@ function PostPage() {
                     <div ref={holderRef} />
                 </div>
 
-                {/* Comments */}
+                {/* Comments section */}
                 <div>
                     <p className="text-xs font-medium text-[#555c78] uppercase tracking-widest mb-4">
                         Comments {comments.length > 0 && `· ${comments.length}`}
                     </p>
 
-                    {/* Add comment */}
+                    {/* Add comment form */}
                     <div className="bg-[#0d1020] border border-[#1e2236] rounded-xl px-5 py-4 mb-4">
                         {errorMessage && (
                             <p className="text-sm text-red-400 bg-[#1a0a0a] border border-[#3d1515] rounded-lg px-3 py-2 mb-4">
@@ -304,7 +322,7 @@ function PostPage() {
                                         )}
                                     </div>
 
-                                    {/* Delete confirmation */}
+                                    {/* Delete confirmation UI */}
                                     {confirmingDeleteId === comment._id && (
                                         <div className="flex items-center justify-between bg-[#1a0a0a] border border-[#3d1515] rounded-lg px-3 py-2 mt-2 mb-2">
                                             <p className="text-xs text-red-400">Delete this comment?</p>
@@ -328,7 +346,7 @@ function PostPage() {
                                         </div>
                                     )}
 
-                                    {/* Edit mode vs display mode */}
+                                    {/* Edit mode or display mode */}
                                     {editingCommentId === comment._id ? (
                                         <div>
                                             <textarea

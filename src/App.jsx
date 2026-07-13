@@ -23,20 +23,25 @@ function App() {
     <>
       <MyNavbar />
       <Routes>
-        <Route path="/" element={<Home />} />
+        {/* public routes, only accessable by non logged in users*/}
         <Route path="/login" element={<OnlyPublic><Login /></OnlyPublic>} />
         <Route path="/signup" element={<OnlyPublic><Signup /></OnlyPublic>} />
 
+        {/* routes that can be viewed by either non logged in or logged in users */}
+        <Route path="/" element={<Home />} />
         <Route path="/game-list" element={<GameList />} />
         <Route path="/game-details/:gameId" element={<GameDetails />} />
         <Route path="/post/view-post/:post" element={<PostPage />} />
 
+        {/* private routes, only accesable by logged in users */}
         <Route path="/game-form" element={<OnlyPrivate><GameForm /></OnlyPrivate>} />
         <Route path="/game-edit/:id/edit" element={<OnlyPrivate><GameForm /></OnlyPrivate>} />
         <Route path="/post/create-post/:game" element={<OnlyPrivate><PostEditor /></OnlyPrivate>} />
         <Route path="/post/edit-post/:post" element={<OnlyPrivate><PostEditor /></OnlyPrivate>} />
         <Route path="/user-details/:user" element={<UserDetails />} />
         <Route path="/edit-user/:user" element={<OnlyPrivate><EditUser /></OnlyPrivate>} />
+
+        {/* error routes */}
         <Route path="/error" element={<ErrorPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

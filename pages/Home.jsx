@@ -24,22 +24,31 @@ import { Link, useNavigate } from "react-router-dom";
 function Home() {
     const navigate = useNavigate()
 
+    // list of recent games and recent posts
     const [games, setGames] = useState([])
     const [posts, setPosts] = useState([])
+
+    // async consideration states
     const [loadingGames, setLoadingGames] = useState(true)
     const [loadingPosts, setLoadingPosts] = useState(true)
 
+    // fetches games and posts on first load
     useEffect(() => {
         getGames()
         getPosts()
     }, [])
 
+    // fetches a list of recent games
     const getGames = async () => {
         try {
-            const response = await service.get("/home/games")
 
+            const response = await service.get("/home/games")
             const data = response.data
+
+            // sets games with a list of recent games, sorted with createdAt
             setGames(response.data)
+
+            // clears async consideration
             setLoadingGames(false)
         } catch (error) {
             console.log(error)
@@ -47,18 +56,25 @@ function Home() {
         }
     }
 
+    // fetches a list of recent posts
     const getPosts = async () => {
         try {
             const response = await service.get("/home/posts")
             console.log(response.data);
             const data = response.data
+
+            // sets posts with a list of the recent posts, sorted with createdAt
             setPosts(data)
+
+            // clears async considerations
             setLoadingPosts(false)
         } catch (error) {
             console.log(error);
             navigate("/error")
         }
     }
+
+    // changes the format of created date into a specified date format
     const getDate = (createdDate) => {
         const date = new Date(createdDate);
 
@@ -71,6 +87,7 @@ function Home() {
         return `${year} ${month} ${day}, ${hours}:${mins}`
     }
 
+    // if any of the async states are true, it returns the spinner component
     if (loadingGames || loadingPosts) return <LoadingSpinner />
 
     return (
@@ -91,6 +108,8 @@ function Home() {
                 <div>
                     <p className="text-xs font-medium text-[#555c78] uppercase tracking-widest mb-6">Latest posts</p>
                     <Timeline>
+
+                        {/* Renders the array of posts each styled in Flowbites Timeline */}
                         {posts.map((post) => (
                             <TimelineItem key={post._id}>
                                 <TimelinePoint icon={HiCalendar} />
@@ -115,6 +134,7 @@ function Home() {
                 {/* Games list */}
                 <div>
                     <p className="text-xs font-medium text-[#555c78] uppercase tracking-widest mb-6">Recent games</p>
+                    {/* Renders the array of games each styled with Flowbites List component */}
                     <List unstyled className="divide-y divide-[#1e2236]">
                         {games.map((game) => (
                             <ListItem key={game._id} className="py-3">
